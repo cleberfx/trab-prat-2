@@ -1,10 +1,12 @@
 import { promises as fs } from 'fs';
 let dataStates = [];
 let dataCities = [];
-let fileName = '';
-let initialStates = [];
+// let fileName = null;
+let initialState = [];
+// start();
+// async function start() {
 readjson();
-writeJsonStastes();
+// }
 
 async function readjson() {
   try {
@@ -17,12 +19,11 @@ async function readjson() {
       };
     });
   } catch (error) {}
-  return dataStates.initial;
 
   console.log(dataStates);
 
   try {
-    const jsonCities = JSON.parse(await fs.readFile('Cidades.json'));
+    jsonCities = JSON.parse(await fs.readFile('Cidades.json'));
     dataCities = jsonCities.map((city) => {
       return {
         id: city.ID,
@@ -33,15 +34,14 @@ async function readjson() {
   } catch (error) {}
 
   console.log(dataCities);
+  writeJsonStates();
 }
 
-function writeJsonStastes() {
-  try {
-    initialStates = dataStates.forEach((initialState) => {
-      console.log(initialState);
-    });
-  } catch (error) {}
-
-  // fileName = `${dataStates.initial}.json`;
-  // await fs.writeFile(fileName);
+async function writeJsonStates() {
+  dataStates.forEach((initState) => {
+    initialState = initState.initial;
+    console.log(initialState);
+    fs.writeFile(`${initialState}.json`);
+  });
 }
+
