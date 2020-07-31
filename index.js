@@ -39,8 +39,8 @@ async function readjson() {
   // console.log(dataCities);
 
   // dofilterCitiesByStates();
-  // writeJsonStates();
-  readJsonsCities();
+  writeJsonStates();
+  // readJsonsCities();
 }
 
 function writeJsonStates() {
@@ -48,6 +48,7 @@ function writeJsonStates() {
   dataStates.forEach((State) => {
     console.log(State.initial, State.id);
     citiesByStates = dataCities.filter((cityStates) => {
+      cityStates.initial = State.initial;
       return cityStates.state === State.id;
     });
     console.log(citiesByStates);
@@ -70,13 +71,36 @@ async function readJsonsCities() {
     // dataStates.forEach((StateL) => {
     for (let StateL of dataStates) {
       // console.log(StateL.initial);
-
+      // StateL.initS = StateL.initial;
       const jsonCitiesbyStates = JSON.parse(
         await fs.readFile(`${StateL.initial}.json`)
       );
-      let citiesByStatesLength = jsonCitiesbyStates;
-      console.log(StateL.initial, citiesByStatesLength.length);
+      citiesByStates = jsonCitiesbyStates;
+      citiesByStates.forEach((city) => {
+        city.stateInit = StateL.initial;
+        // console.log(city.stateInit, citiesByStates.length);
+      });
+      // console.log(citiesByStates.stateInit);
+      // let j = citiesByStates;
+      // j.sort((a, b) => {
+      //   return a.length.localeCompare(b.length);
+      // });
+      // console.log(j);
     }
+    return citiesByStates;
+    // console.log(citiesByStates);
     // });
   } catch (error) {}
+  statesMoreCities();
+}
+
+function statesMoreCities() {
+  console.log(citiesByStates);
+
+  // citiesByStates.forEach((statesort) => {
+  //   console.log(statesort.length);
+  //   citiesByStates.sort((a, b) => {
+  //     return b - a;
+  //   });
+  // });
 }
