@@ -5,6 +5,7 @@ let dataCities = [];
 let initialState = [];
 let idsState = [];
 let citiesByStates = [];
+// let jsonCitiesbyStates = [];
 // start();
 // async function start() {
 readjson();
@@ -22,7 +23,7 @@ async function readjson() {
     });
   } catch (error) {}
 
-  console.log(dataStates);
+  // console.log(dataStates);
 
   try {
     const jsonCities = JSON.parse(await fs.readFile('Cidades.json'));
@@ -35,10 +36,11 @@ async function readjson() {
     });
   } catch (error) {}
 
-  console.log(dataCities);
+  // console.log(dataCities);
 
   // dofilterCitiesByStates();
-  writeJsonStates();
+  // writeJsonStates();
+  readJsonsCities();
 }
 
 function writeJsonStates() {
@@ -52,14 +54,29 @@ function writeJsonStates() {
     fs.writeFile(`${State.initial}.json`, JSON.stringify(citiesByStates));
   });
 }
-function dofilterCitiesByStates() {
-  dataStates.forEach((idState) => {
-    idsState = idState.id;
-    console.log(idState.id, idState.initial);
+// function dofilterCitiesByStates() {
+//   dataStates.forEach((idState) => {
+//     idsState = idState.id;
+//     console.log(idState.id, idState.initial);
 
-    citiesByStates = dataCities.filter((cityStates) => {
-      return cityStates.state === idsState;
-    });
-    console.log(citiesByStates);
-  });
+//     citiesByStates = dataCities.filter((cityStates) => {
+//       return cityStates.state === idsState;
+//     });
+//     console.log(citiesByStates);
+//   });
+// }
+async function readJsonsCities() {
+  try {
+    // dataStates.forEach((StateL) => {
+    for (let StateL of dataStates) {
+      // console.log(StateL.initial);
+
+      const jsonCitiesbyStates = JSON.parse(
+        await fs.readFile(`${StateL.initial}.json`)
+      );
+      let citiesByStatesLength = jsonCitiesbyStates;
+      console.log(StateL.initial, citiesByStatesLength.length);
+    }
+    // });
+  } catch (error) {}
 }
