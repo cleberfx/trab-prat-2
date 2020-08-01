@@ -7,6 +7,7 @@ let idsState = [];
 let citiesByStates = [];
 let jsonCitiesbyStates = [];
 let citiesStates = [];
+let addObj = [];
 // start();
 // async function start() {
 readjson();
@@ -44,7 +45,8 @@ async function readjson() {
   // console.log(dataCities.length);
   // dofilterCitiesByStates();
   // writeJsonStates();
-  readJsonsCities();
+  readJsonsCities2();
+  // statesMoreCities();
 }
 
 function writeJsonStates() {
@@ -86,11 +88,15 @@ async function readJsonsCities() {
           initial: c.initial,
         };
       });
-      // StateL.quantCities = citiesStates.length;
-      // fs.appendFile(`${StateL.initial}.json`, JSON.stringify(StateL.quantCities));
-      let r = `${citiesStates} - ${citiesStates.length}`;
-      console.log(r);
+      StateL.quantCities = citiesStates.length;
+      fs.appendFile(
+        `${StateL.initial}.json`,
+        JSON.stringify(StateL.quantCities)
+      );
+      // let r = `${citiesStates} - ${citiesStates.length}`;
+      // console.log(r);
       // });
+      console.log(citiesStates);
     }
   } catch (error) {}
 
@@ -98,13 +104,35 @@ async function readJsonsCities() {
   // statesMoreCities();
 }
 
-function statesMoreCities() {
-  console.log(citiesByStates);
+async function readJsonsCities2() {
+  try {
+    for (let StateL of dataStates) {
+      // dataStates.forEach((StateL) => {
+      const jsonCitiesbyStates = JSON.parse(
+        await fs.readFile(`${StateL.initial}.json`)
+      );
+      citiesStates = jsonCitiesbyStates.map((c) => {
+        return {
+          id: c.id,
+          name: c.name,
+          state: c.state,
+          initial: c.initial,
+          // length: c.length,
+        };
+      });
+      addObj.push({ init: StateL.initial, quant: citiesStates.length });
+      // console.log(citiesStates);
+    }
+  } catch (error) {}
+  console.log(addObj);
+  addObj.sort((a, b) => a.quant - b.quant);
+  let resultslice = Object.keys(addObj)
+    .slice(0, 5)
+    .map((key) => ({ [key]: addObj[key] }));
+  console.log(resultslice);
+  addObj.sort((a, b) => b.quant - a.quant).slice(0, 5);
 
-  // citiesByStates.forEach((statesort) => {
-  console.log(statesort.length);
-  citiesByStates.sort((a, b) => {
-    return b - a;
-  });
-  // });
+  resultslice = Object(addObj).slice(0, 5);
+
+  console.log(resultslice);
 }
