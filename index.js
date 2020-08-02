@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
 let dataStates = [];
 let dataCities = [];
-// let fileName = null;
+
 let initialState = [];
 let idsState = [];
 let citiesByStates = [];
@@ -10,10 +10,8 @@ let citiesStates = [];
 let addObj = [];
 let addObj2 = [];
 let addObjWithLength = [];
-// start();
-// async function start() {
+
 readjson();
-// }
 
 async function readjson() {
   try {
@@ -27,34 +25,29 @@ async function readjson() {
     });
   } catch (error) {}
 
-  // console.log(dataStates);
-  // prettier-ignore
   try {
     const jsonCities = JSON.parse(await fs.readFile('Cidades.json'));
-    dataCities = jsonCities.map(city => {
+    dataCities = jsonCities.map((city) => {
       const { ID, Nome, Estado } = city;
       return {
         id: ID,
         name: Nome,
         state: Estado,
       };
-      
-
-    }).sort((a, b) => 
-       a.name.localeCompare(b.name)).sort((a, b) => a.name.length - b.name.length);
-    
-    
+    });
   } catch (error) {}
-  console.log(dataCities);
-  // dofilterCitiesByStates();
+
   // writeJsonStates();
-  readJsonsCities();
-  // statesMoreCities();
-  // biggerNameSizeByState();
+  // numberCitiesByState();
+  // moreCitiesByState();
+  // lessCitiesByState();
+  // bigCityNameByState();
+  // smallCityNameByState();
+  bigCityName();
+  // smallCityName();
 }
 
 function writeJsonStates() {
-  // dofilterCitiesByStates();
   dataStates.forEach((State) => {
     console.log(State.initial, State.id);
     citiesByStates = dataCities.filter((cityStates) => {
@@ -66,70 +59,30 @@ function writeJsonStates() {
     fs.writeFile(`${State.initial}.json`, JSON.stringify(citiesByStates));
   });
 }
-// function dofilterCitiesByStates() {
-//   dataStates.forEach((idState) => {
-//     idsState = idState.id;
-//     console.log(idState.id, idState.initial);
 
-//     citiesByStates = dataCities.filter((cityStates) => {
-//       return cityStates.state === idsState;
-//     });
-//     console.log(citiesByStates);
-//   });
-// }
-async function readJsonsCities() {
-  let newCitiesStates = [];
-  let rs = [];
-  let cityname = null;
-  let stateInitial = null;
+async function numberCitiesByState() {
   try {
     for (let StateL of dataStates) {
       // dataStates.forEach((StateL) => {
       const jsonCitiesbyStates = JSON.parse(
         await fs.readFile(`${StateL.initial}.json`)
       );
-      citiesStates = jsonCitiesbyStates
-        .map((c) => {
-          const { id, name, state, initial } = c;
-          cityname = name;
-          stateInitial = initial;
-          // console.log(cityname);
-          return {
-            name: name,
+      citiesStates = jsonCitiesbyStates.map((c) => {
+        const { initial } = c;
 
-            initial: initial,
-          };
-        })
-        .sort((a, b) => a.name.length - b.name.length)
-        .slice(0, 1);
+        return {
+          initial: initial,
+        };
+      });
 
-      // const p = name;
-      // console.log(p);
-      // let resultsl = Object(citiesStates).slice(0, 1);
-      // newCitiesStates = [...citiesStates];
-
-      // rs = [].concat{(...citiesStates)};
-      // const { name, initial } = rs;
-      StateL.nameC = cityname;
-      StateL.inSt = stateInitial;
-      // addObj2.push({ name: StateL.nameC, initial: StateL.inSt });
-      // rs.sort((a, b) => a.name.length - b.name.length);
-      console.log(citiesStates);
-      // rs.forEach((Statex) => {
-      // });
-      // console.log(citiesStates);
-      // addObjWithLength.push({
-      //   Cities: name,
-      // });
-      // console.log(addObjWithLength);
+      console.log(StateL.initial, citiesStates.length);
     }
   } catch (error) {}
 
   // console.log(citiesByStates);
-  // statesMoreCities();
 }
 
-async function readJsonsCities2() {
+async function lessCitiesByState() {
   try {
     for (let StateL of dataStates) {
       // dataStates.forEach((StateL) => {
@@ -142,30 +95,126 @@ async function readJsonsCities2() {
           name: c.name,
           state: c.state,
           initial: c.initial,
-          // length: c.length,
         };
       });
       addObj.push({ init: StateL.initial, quant: citiesStates.length });
       // console.log(citiesStates);
     }
   } catch (error) {}
-  console.log(addObj);
-  addObj.sort((a, b) => a.quant - b.quant);
-  let resultslice = Object.keys(addObj)
-    .slice(0, 5)
-    .map((key) => ({ [key]: addObj[key] }));
-  console.log(resultslice);
-  addObj.sort((a, b) => b.quant - a.quant).slice(0, 5);
 
-  resultslice = Object(addObj).slice(0, 5);
+  addObj.sort((a, b) => a.quant - b.quant).slice(0, 5);
+
+  let resultslice = Object(addObj).slice(0, 5);
 
   console.log(resultslice);
 }
-async function biggerNameSizeByState() {
-  addObjWithLength.push({
-    // nameCity: c.name,
-    initState: StateL.initial,
-    // nameCityLength: c.name.length,
-  });
-  console.log(addObjWithLength);
+
+async function moreCitiesByState() {
+  try {
+    for (let StateL of dataStates) {
+      const jsonCitiesbyStates = JSON.parse(
+        await fs.readFile(`${StateL.initial}.json`)
+      );
+      citiesStates = jsonCitiesbyStates.map((c) => {
+        return {
+          id: c.id,
+          name: c.name,
+          state: c.state,
+          initial: c.initial,
+        };
+      });
+      addObj.push({ init: StateL.initial, quant: citiesStates.length });
+    }
+  } catch (error) {}
+
+  addObj.sort((a, b) => b.quant - a.quant).slice(0, 5);
+
+  let resultslice = Object(addObj).slice(0, 5);
+
+  console.log(resultslice);
+}
+async function smallCityNameByState() {
+  try {
+    for (let StateL of dataStates) {
+      const jsonCitiesbyStates = JSON.parse(
+        await fs.readFile(`${StateL.initial}.json`)
+      );
+      citiesStates = jsonCitiesbyStates
+        .map((c) => {
+          const { name, initial } = c;
+
+          return {
+            name: name,
+
+            initial: initial,
+          };
+        })
+        .sort((a, b) => a.name.length - b.name.length)
+        .slice(0, 1);
+
+      console.log(citiesStates);
+    }
+  } catch (error) {}
+}
+
+async function smallCityName() {
+  try {
+    const jsonCities = JSON.parse(await fs.readFile('Cidades.json'));
+    let smallCityNameData = jsonCities
+      .map((city) => {
+        const { ID, Nome, Estado } = city;
+        return {
+          id: ID,
+          name: Nome,
+          state: Estado,
+        };
+      })
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => a.name.length - b.name.length)
+      .slice(0, 3);
+
+    console.log(smallCityNameData);
+  } catch (error) {}
+}
+async function bigCityName() {
+  try {
+    const jsonCities = JSON.parse(await fs.readFile('Cidades.json'));
+    let bigCityNameData = jsonCities
+      .map((city) => {
+        const { ID, Nome, Estado } = city;
+        return {
+          id: ID,
+          name: Nome,
+          state: Estado,
+        };
+      })
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .sort((a, b) => b.name.length - a.name.length)
+      .slice(0, 3);
+
+    console.log(bigCityNameData);
+  } catch (error) {}
+}
+async function bigCityNameByState() {
+  try {
+    for (let StateL of dataStates) {
+      const jsonCitiesbyStates = JSON.parse(
+        await fs.readFile(`${StateL.initial}.json`)
+      );
+      citiesStates = jsonCitiesbyStates
+        .map((c) => {
+          const { name, initial } = c;
+
+          return {
+            name: name,
+
+            initial: initial,
+          };
+        })
+        .sort((a, b) => b.name.length - a.name.length)
+        .slice(0, 1);
+
+      console.log(citiesStates);
+    }
+  } catch (error) {}
 }
