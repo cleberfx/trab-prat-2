@@ -8,6 +8,8 @@ let citiesByStates = [];
 let jsonCitiesbyStates = [];
 let citiesStates = [];
 let addObj = [];
+let addObj2 = [];
+let addObjWithLength = [];
 // start();
 // async function start() {
 readjson();
@@ -38,15 +40,17 @@ async function readjson() {
       };
       
 
-    });
+    }).sort((a, b) => 
+       a.name.localeCompare(b.name)).sort((a, b) => a.name.length - b.name.length);
     
     
   } catch (error) {}
-  // console.log(dataCities.length);
+  console.log(dataCities);
   // dofilterCitiesByStates();
   // writeJsonStates();
-  readJsonsCities2();
+  readJsonsCities();
   // statesMoreCities();
+  // biggerNameSizeByState();
 }
 
 function writeJsonStates() {
@@ -74,29 +78,50 @@ function writeJsonStates() {
 //   });
 // }
 async function readJsonsCities() {
+  let newCitiesStates = [];
+  let rs = [];
+  let cityname = null;
+  let stateInitial = null;
   try {
     for (let StateL of dataStates) {
       // dataStates.forEach((StateL) => {
       const jsonCitiesbyStates = JSON.parse(
         await fs.readFile(`${StateL.initial}.json`)
       );
-      citiesStates = jsonCitiesbyStates.map((c) => {
-        return {
-          id: c.id,
-          name: c.name,
-          state: c.state,
-          initial: c.initial,
-        };
-      });
-      StateL.quantCities = citiesStates.length;
-      fs.appendFile(
-        `${StateL.initial}.json`,
-        JSON.stringify(StateL.quantCities)
-      );
-      // let r = `${citiesStates} - ${citiesStates.length}`;
-      // console.log(r);
-      // });
+      citiesStates = jsonCitiesbyStates
+        .map((c) => {
+          const { id, name, state, initial } = c;
+          cityname = name;
+          stateInitial = initial;
+          // console.log(cityname);
+          return {
+            name: name,
+
+            initial: initial,
+          };
+        })
+        .sort((a, b) => a.name.length - b.name.length)
+        .slice(0, 1);
+
+      // const p = name;
+      // console.log(p);
+      // let resultsl = Object(citiesStates).slice(0, 1);
+      // newCitiesStates = [...citiesStates];
+
+      // rs = [].concat{(...citiesStates)};
+      // const { name, initial } = rs;
+      StateL.nameC = cityname;
+      StateL.inSt = stateInitial;
+      // addObj2.push({ name: StateL.nameC, initial: StateL.inSt });
+      // rs.sort((a, b) => a.name.length - b.name.length);
       console.log(citiesStates);
+      // rs.forEach((Statex) => {
+      // });
+      // console.log(citiesStates);
+      // addObjWithLength.push({
+      //   Cities: name,
+      // });
+      // console.log(addObjWithLength);
     }
   } catch (error) {}
 
@@ -135,4 +160,12 @@ async function readJsonsCities2() {
   resultslice = Object(addObj).slice(0, 5);
 
   console.log(resultslice);
+}
+async function biggerNameSizeByState() {
+  addObjWithLength.push({
+    // nameCity: c.name,
+    initState: StateL.initial,
+    // nameCityLength: c.name.length,
+  });
+  console.log(addObjWithLength);
 }
